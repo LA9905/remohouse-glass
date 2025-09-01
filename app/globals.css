@@ -1,0 +1,45 @@
+/* Tailwind v4 */
+@import "tailwindcss";
+
+/* Paleta y tokens (v4 usa @theme) */
+@theme {
+  --color-primary-50:  #eef8ff;
+  --color-primary-100: #d9efff;
+  --color-primary-200: #bde3ff;
+  --color-primary-300: #90d0ff;
+  --color-primary-400: #5ab6ff;
+  --color-primary-500: #2a98f5;
+  --color-primary-600: #1e7ad1;
+  --color-primary-700: #1b64ac;
+  --color-primary-800: #1a528a;
+  --color-primary-900: #183f66;
+}
+
+/* Base mínima */
+:root { color-scheme: light; }
+body { @apply bg-white text-slate-900 antialiased; }
+.container-page { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+
+/* Botón flotante WhatsApp */
+.whatsapp-float {
+  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 50;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem; border-radius: 9999px; background: #25d366; color: white;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+  transition: transform .15s ease, filter .15s ease, background .15s ease;
+}
+.whatsapp-float:hover { filter: brightness(0.95); transform: translateY(-1px); }
+
+/* Tarjetas suaves */
+.card {
+  @apply rounded-2xl border bg-white shadow-sm;
+}
+
+/* Títulos */
+h1, h2, h3 { letter-spacing: -0.02em; }
+
+/* Enlaces */
+a { @apply transition-colors; }
+
+.nav-link { @apply hover:text-primary-700; }
+

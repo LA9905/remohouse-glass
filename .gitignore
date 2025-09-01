@@ -1,0 +1,21 @@
+# Dependencias y builds
+/node_modules
+/.next
+/out
+/dist
+/.turbo
+/.vercel
+
+# Entornos
+.env
+.env.local
+.env.*.local
+
+# Logs y sistema
+*.log
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
