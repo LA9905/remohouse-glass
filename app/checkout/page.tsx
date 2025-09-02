@@ -34,44 +34,54 @@ export default function CheckoutPage() {
 
   const disabled = items.length === 0 || !buyer.fullName || !buyer.email
 
-  const pay = async () => {
-    if (disabled) return
-    try {
-      setLoading(true)
+    const pay = async () => {
+      if (disabled) return
+      try {
+        setLoading(true)
 
-      // 1) Crear transacción en el servidor
-      const origin = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin
-      const returnUrl = `${origin}/webpay/return` // a esta ruta volverá Webpay (frontend)
-      const buyOrder = `RH-${Date.now()}`
-      const sessionId = `SID-${Math.random().toString(36).slice(2, 10)}`
-      const amount = subtotal
+        const origin = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin
+        const returnUrl = `${origin}/webpay/return`
+        const buyOrder = `RH-${Date.now()}`
+        const sessionId = `SID-${Math.random().toString(36).slice(2, 10)}`
 
-      const createRes = await fetch('/api/webpay/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, buyOrder, sessionId, returnUrl }),
-      })
-      const createData = await createRes.json()
-      if (!createRes.ok) throw new Error(createData?.error || 'Error creando transacción')
+        // Enviar solo el carrito mínimo necesario; el servidor calcula el monto
+        const createRes = await fetch('/api/webpay/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            buyOrder,
+            sessionId,
+            returnUrl,
+            cart: {
+              items: items.map(i => ({
+                productId: i.productId,
+                sizeLabel: i.sizeLabel,
+                quantity: i.quantity,
+              })),
+            },
+          }),
+        })
+        const createData = await createRes.json()
+        if (!createRes.ok) throw new Error(createData?.error || 'Error creando transacción')
 
-      // 2) Redirigir a Webpay (POST con token_ws)
-      const form = document.createElement('form')
-      form.method = 'POST'
-      form.action = createData.url
-      const input = document.createElement('input')
-      input.type = 'hidden'
-      input.name = 'token_ws'
-      input.value = createData.token
-      form.appendChild(input)
-      document.body.appendChild(form)
-      form.submit()
-      // al volver, /webpay/return hará el commit y redirigirá a /success|/failure|/pending
-    } catch (e) {
-      alert('No pudimos iniciar el pago. Inténtalo nuevamente.')
-    } finally {
-      setLoading(false)
+        // Redirigir a Webpay (POST con token_ws)
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = createData.url
+        const input = document.createElement('input')
+        input.type = 'hidden'
+        input.name = 'token_ws'
+        input.value = createData.token
+        form.appendChild(input)
+        document.body.appendChild(form)
+        form.submit()
+      } catch (e) {
+        alert('No pudimos iniciar el pago. Inténtalo nuevamente.')
+      } finally {
+        setLoading(false)
     }
   }
+
 
   return (
     <section className="max-w-3xl mx-auto">
