@@ -1,58 +1,22 @@
 'use client'
-import type { Product } from '../lib/types'
-import { useCart } from '../context/CartContext'
 import Image from 'next/image'
-import { useState } from 'react'
-
-function pickImage(product: Product) {
-  // Si el producto trae image explícita, úsala:
-  if (product.image) return product.image
-
-  // Fallbacks por forma (ajusta los números según te gusten)
-  switch (product.shape) {
-    case 'Arco':        return '/espejos/espejo1.jpg'
-    case 'Redondo':     return '/espejos/espejo2.jpg'
-    case 'Rectangular': return '/espejos/espejo3.jpg'
-    case 'Irregular':   return '/espejos/espejo4.jpg'
-    default:            return '/espejos/espejo5.jpg'
-  }
-}
+import type { Product } from '@/lib/types'
+import { useCart } from '../context/CartContext'
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
-  const [added, setAdded] = useState<string | null>(null)
-
-  const handleAdd = (sizeLabel: string, price: number) => {
-    addItem({
-      productId: product.id,
-      name: `${product.name} ${sizeLabel}`,
-      sizeLabel,
-      unitPrice: price,
-      quantity: 1
-    })
-    setAdded(sizeLabel)
-    setTimeout(() => setAdded(null), 1200)
-  }
-
-  const src = pickImage(product)
 
   return (
     <div className="rounded-2xl shadow-sm border overflow-hidden bg-white hover:shadow-md transition">
-      {/* Imagen */}
-      <div className="relative h-52">
+      <div className="relative h-44">
         <Image
-          src={src}
+          src={product.image}
           alt={product.name}
           fill
           className="object-cover"
-          sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={false}
         />
-        {added && (
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-primary-600 text-white text-xs px-2 py-1 shadow">
-            Agregado: {added} ✅
-          </div>
-        )}
       </div>
 
       <div className="p-4">
@@ -64,10 +28,20 @@ export default function ProductCard({ product }: { product: Product }) {
             <div key={s.label} className="flex items-center justify-between gap-3">
               <span className="text-sm">{s.label}</span>
               <div className="flex items-center gap-3">
-                <span className="font-semibold">${s.price.toLocaleString('es-CL')}</span>
+                <span className="font-semibold">
+                  ${s.price.toLocaleString('es-CL')}
+                </span>
                 <button
                   className="px-3 py-1.5 text-sm rounded-md bg-primary-600 text-white hover:bg-primary-700"
-                  onClick={() => handleAdd(s.label, s.price)}
+                  onClick={() =>
+                    addItem({
+                      productId: product.id,
+                      name: `${product.name} ${s.label}`,
+                      sizeLabel: s.label,
+                      unitPrice: s.price,
+                      quantity: 1,
+                    })
+                  }
                 >
                   Agregar
                 </button>

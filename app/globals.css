@@ -43,3 +43,22 @@ a { @apply transition-colors; }
 
 .nav-link { @apply hover:text-primary-700; }
 
+/* ya tienes @tailwind base/components/utilities ... */
+
+.nav-link { @apply hover:text-primary-700; }
+
+.btn-primary { @apply inline-flex items-center justify-center rounded-md bg-primary-600 px-4 py-2 text-white hover:bg-primary-700; }
+.btn-white   { @apply inline-flex items-center justify-center rounded-md bg-white/90 px-4 py-2 text-slate-900 hover:bg-white; }
+.btn-cart    { @apply relative inline-flex items-center gap-2 rounded-xl border bg-white/60 backdrop-blur px-3 py-1.5 hover:bg-white; }
+.badge       { @apply absolute -right-2 -top-2 grid h-5 min-w-5 place-items-center rounded-full bg-primary-600 px-1 text-xs text-white; }
+
+.section-title { @apply text-2xl font-semibold; }
+.feature-card  { @apply rounded-2xl border bg-white p-4; }
+.card          { @apply rounded-2xl border bg-white overflow-hidden hover:shadow-sm transition; }
+
+.dd-item { @apply block rounded-md px-3 py-2 text-sm hover:bg-slate-50; }
+.chip    { @apply rounded-full border px-3 py-1.5 text-sm hover:bg-slate-50; }
+.input   { @apply rounded-md border px-3 py-2 text-sm; }
+
+/* Masonry helper */
+.break-inside-avoid { break-inside: avoid; }

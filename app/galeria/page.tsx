@@ -1,30 +1,27 @@
 import Image from 'next/image'
 
 export default function GaleriaPage() {
-  const total = 14
-  const items = Array.from({ length: total }).map((_, i) => `/espejos/espejo${i + 1}.jpg`)
+  // 14 imágenes dentro de /public/espejos
+  const imgs = Array.from({ length: 14 }, (_, i) => `/espejos/espejo${i + 1}.jpg`)
 
   return (
-    <section>
-      <h2 className="text-2xl font-semibold mb-6">Galería de espejos</h2>
+    <main className="container-page py-8">
+      <h1 className="section-title mb-6">Galería de espejos</h1>
 
-      {/* Grid responsivo estilo catálogo */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {items.map((src, idx) => (
-          <div key={src} className="relative aspect-[4/5] overflow-hidden rounded-2xl border bg-white">
+      {/* Masonry con columns */}
+      <div className="columns-1 sm:columns-2 lg:columns-4 gap-4 [column-fill:_balance]">
+        {imgs.map((src, idx) => (
+          <div key={idx} className="mb-4 break-inside-avoid rounded-2xl border bg-white overflow-hidden">
             <Image
               src={src}
-              alt={`Espejo ${idx + 1}`}
-              fill
-              className="object-cover hover:scale-[1.03] transition-transform"
-              sizes="(min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
+              alt={`Galería ${idx + 1}`}
+              width={1000}
+              height={1400}
+              className="w-full h-auto"
             />
           </div>
         ))}
       </div>
-      <p className="mt-6 text-sm text-slate-600">
-        ¿Viste un modelo que te guste? Escríbenos por WhatsApp y lo fabricamos a la medida.
-      </p>
-    </section>
+    </main>
   )
 }
